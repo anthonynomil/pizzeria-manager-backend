@@ -8,9 +8,9 @@ export const pizzaRoute = express.Router();
 
 pizzaRoute.post("/add", validate(pizzaValidator.add), pizzaController.add);
 pizzaRoute.get("/get", pizzaController.getAll);
-pizzaRoute.get("/get/:id", validate(pizzaValidator.getById), pizzaController.getById);
-pizzaRoute.get("/get/:name", validate(pizzaValidator.getByName), pizzaController.getByName);
-pizzaRoute.delete("/remove/:id", validate(pizzaValidator.remove), pizzaController.removeById);
-pizzaRoute.put("/update/:id", validate(pizzaValidator.update), pizzaController.updateById);
-pizzaRoute.get("/get/id/:id/ingredients", validate(pizzaValidator.getIngredientsById), pizzaController.getIngredientsByPizzaId);
-pizzaRoute.get("/get/name/:name/ingredients", validate(pizzaValidator.getIngredientsByName), pizzaController.getIngredientsByPizzaName);
+pizzaRoute.get("/get/id", validate(pizzaValidator.getById), pizzaController.getById);
+pizzaRoute.get("/get/name", validate(pizzaValidator.getByName), pizzaController.getByName);
+pizzaRoute.delete("/remove", validate(pizzaValidator.remove), pizzaController.removeById);
+pizzaRoute.put("/update", validate(pizzaValidator.update), pizzaController.updateById);
+pizzaRoute.get("/get/id//ingredients", validate(pizzaValidator.getIngredientsById), pizzaController.getIngredientsByPizzaId);
+pizzaRoute.get("/get/name/ingredients", validate(pizzaValidator.getIngredientsByName), pizzaController.getIngredientsByPizzaName);

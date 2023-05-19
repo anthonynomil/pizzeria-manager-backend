@@ -6,7 +6,7 @@ import {getByName as getIngredientByName} from "./ingredient.service.js";
 
 export const create = async (pizzaBody, ingredients) => {
     let pizza = await getByName(pizzaBody.name);
-    if (pizza.length > 0) {
+    if (pizza) {
         throw new ApiError(httpStatus.BAD_REQUEST, "Pizza already exists");
     }
     pizza = await Pizza.create(pizzaBody);
