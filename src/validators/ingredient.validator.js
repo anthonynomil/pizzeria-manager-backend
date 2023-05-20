@@ -1,32 +1,39 @@
 import Joi from "joi";
 
-export const add = {
-    body: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(1).max(30).lowercase(),
-    }),
+const schema = {
+    name: Joi.string().required().alphanum().min(1).max(30).lowercase(),
+    id: Joi.number().required().min(1),
 };
 
-export const getById = {
-    query: Joi.object().keys({
-        id: Joi.number().required().min(1),
+export const add = Joi.object({
+    body: Joi.object({
+        name: schema.name,
     }),
-};
+});
 
-export const getByName = {
-    params: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(1).max(30).lowercase(),
+export const getId = Joi.object({
+    params: Joi.object({
+        id: schema.id,
     }),
-};
+});
 
-export const removeById = {
-    body: Joi.object().keys({
-        id: Joi.number().required().min(1),
+export const pizzas = Joi.object({
+    params: Joi.object({
+        id: schema.id,
     }),
-};
+});
 
-export const updateById = {
-    body: Joi.object().keys({
-        id: Joi.number().required().min(1),
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
+export const remove = Joi.object({
+    params: Joi.object({
+        id: schema.id,
     }),
-};
+});
+
+export const update = Joi.object({
+    params: Joi.object({
+        id: schema.id,
+    }),
+    body: Joi.object({
+        name: schema.name,
+    }),
+});

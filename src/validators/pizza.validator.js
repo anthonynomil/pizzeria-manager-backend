@@ -1,55 +1,58 @@
 import Joi from "joi";
 
+const schema = {
+    id: Joi.number().required().min(1),
+    name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
+    price: Joi.number().required().min(0).max(1000),
+    ingredients: Joi.array().items(Joi.string().required().alphanum().lowercase().min(3).max(30)).min(1).max(10),
+};
+
 export const add = {
     body: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
-        price: Joi.number().required().min(0).max(1000),
-        ingredients: Joi.array().items(Joi.string().required().alphanum().min(3).max(30)).min(1).max(10),
+        name: schema.name,
+        price: schema.price,
+        ingredients: schema.ingredients,
     }),
 };
 
-export const addIngredient = {
+export const postUpdateId = {
     body: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
-        ingredient: Joi.string().required().alphanum().min(3).max(30).lowercase(),
+        id: schema.id,
+        name: schema.name,
+        price: schema.price,
+        ingredients: schema.ingredients,
     }),
 };
 
-export const getById = {
-    query: Joi.object().keys({
-        id: Joi.number().required().min(1),
-    }),
-};
-
-export const remove = {
+export const postUpdateName = {
     body: Joi.object().keys({
-        id: Joi.number().required().min(1),
-    }),
+        oldName: schema.name,
+        name: schema.name,
+        price: schema.price,
+        ingredients: schema.ingredients,
+    })
 };
 
-export const update = {
+export const getId = {
+    query: Joi.object().keys({
+        id: schema.id,
+    })
+};
+
+export const getName = {
+    query: Joi.object().keys({
+        name: schema.name,
+    })
+};
+
+export const postId = {
     body: Joi.object().keys({
-        id: Joi.number().required().min(1),
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
-        price: Joi.number().required().min(0).max(1000),
-        ingredients: Joi.array().items(Joi.string().required().alphanum().min(3).max(30).lowercase()).min(1).max(10),
-    }),
+        id: schema.id,
+    })
 };
 
-export const getIngredientsById = {
-    query: Joi.object().keys({
-        id: Joi.number().required().min(1),
-    }),
-};
-
-export const getIngredientsByName = {
-    query: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
-    }),
-};
-
-export const getByName = {
-    query: Joi.object().keys({
-        name: Joi.string().required().alphanum().min(3).max(30).lowercase(),
-    }),
+export const postName = {
+    body: Joi.object().keys({
+        name: schema.name,
+    })
 };

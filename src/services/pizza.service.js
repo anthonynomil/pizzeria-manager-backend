@@ -4,6 +4,23 @@ import {PizzaIngredient} from "../models/pizzaIngredient.js";
 import ApiError from "../utils/ApiError.js";
 import {getByName as getIngredientByName} from "./ingredient.service.js";
 
+export async function updateByName(oldName, pizzaBody) {
+    let pizza = await getByName(oldName);
+    if (!pizza) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Pizza already exists");
+    }
+    Object.assign(pizza, pizzaBody);
+    await pizza.save();
+    await PizzaIngredient.destroy({
+        where: {
+            pizza_id: pizza.id
+        }
+    });
+    await addIngredients(pizza, pizzaBody.ingredients);
+    return pizza;
+}
+
+
 export const create = async (pizzaBody, ingredients) => {
     let pizza = await getByName(pizzaBody.name);
     if (pizza) {
@@ -38,11 +55,19 @@ const addIngredients = async (pizza, ingredients) => {
 };
 
 export const getAll = async () => {
-    return await Pizza.findAll();
+    return await Pizza.findAll({
+        include: "ingredients",
+    });
 };
 
 export const getById = async (id) => {
-    return await Pizza.findByPk(id);
+    const pizza = await Pizza.findByPk(id, {
+        include: "ingredients",
+    });
+    if (!pizza) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Pizza not found");
+    }
+    return pizza;
 };
 
 export const updateById = async (id, pizzaBody, ingredients) => {
@@ -93,7 +118,8 @@ export const getByName = async (name) => {
     return await Pizza.findOne({
         where: {
             name: name,
-        }
+        },
+        include: "ingredients",
     });
 };
 

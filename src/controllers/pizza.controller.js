@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import * as pizzaService from "../services/pizza.service.js";
 import ApiError from "../utils/ApiError.js";
 import {catchAsync} from "../utils/catchAsync.js";
+import {sendResponse} from "../utils/response.js";
 
 export const add = catchAsync(async (req, res) => {
     const {
@@ -52,16 +53,6 @@ export const removeById = catchAsync(async (req, res) => {
     res.status(httpStatus.OK).send(pizza);
 });
 
-export const addIngredient = catchAsync(async (req, res) => {
-    const {
-        name,
-        ingredient
-    } = req.body;
-
-    const pizza = await pizzaService.addIngredient(name, ingredient);
-    res.status(httpStatus.OK).send(pizza);
-});
-
 export const getIngredientsByPizzaId = catchAsync(async (req, res) => {
     const {id} = req.query;
     const ingredients = await pizzaService.getIngredientsById(id);
@@ -81,4 +72,23 @@ export const getByName = catchAsync(async (req, res) => {
         throw new ApiError(httpStatus.NOT_FOUND, "Pizza not found");
     }
     res.status(httpStatus.OK).send(pizza);
+});
+
+export const removeByName = catchAsync(async (req, res) => {
+    const {
+        oldName,
+        name,
+        price,
+        ingredients
+    } = req.body;
+    const pizzaBody = {
+        name: name,
+        price: price,
+        ingredients: ingredients
+    };
+    const pizza = await pizzaService.updateByName(oldName, pizzaBody);
+    sendResponse(res, httpStatus.OK, {
+        pizza: pizza,
+        message: "Pizza updated"
+    });
 });

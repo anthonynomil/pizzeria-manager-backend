@@ -8,6 +8,7 @@ export const ingredientRoutes = express.Router();
 
 ingredientRoutes.post("/add", validate(validatorIngredient.add), controllerIngredient.add);
 ingredientRoutes.get("/get", controllerIngredient.getAll);
-ingredientRoutes.get("/get/id", validate(validatorIngredient.getById), controllerIngredient.getById);
-ingredientRoutes.delete("/remove", validate(validatorIngredient.removeById), controllerIngredient.removeById);
-ingredientRoutes.put("/update", validate(validatorIngredient.updateById), controllerIngredient.updateById);
+ingredientRoutes.get("/get/:id", validate(validatorIngredient.getId), controllerIngredient.getId);
+ingredientRoutes.get("/get/:id/pizzas", validate(validatorIngredient.pizzas), controllerIngredient.getPizzasById);
+ingredientRoutes.delete("/remove/:id", validate(validatorIngredient.remove), controllerIngredient.removeById);
+ingredientRoutes.put("/update/:id", validate(validatorIngredient.update), controllerIngredient.updateById);

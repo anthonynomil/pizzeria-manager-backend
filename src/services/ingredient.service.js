@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import {Ingredient} from "../models/ingredient.model.js";
+import {PizzaIngredient} from "../models/pizzaIngredient.js";
 import ApiError from "../utils/ApiError.js";
 
 export const create = async (ingredientBody) => {
@@ -11,11 +12,15 @@ export const create = async (ingredientBody) => {
 };
 
 export const getByName = async (name) => {
-    return await Ingredient.findAll({
+    const ingredient = await Ingredient.findAll({
         where: {
             name: name,
         },
     });
+    if (!ingredient) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
+    }
+    return ingredient;
 };
 
 export const getById = async (id) => {
@@ -42,6 +47,23 @@ export const removeById = async (id) => {
     if (!ingredient) {
         throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
     }
+    await PizzaIngredient.destroy({
+        where: {
+            ingredient_id: id
+        }
+    });
     await ingredient.destroy();
     return ingredient;
+};
+
+export const getPizzasById = async (id) => {
+    const ingredient = await getById(id);
+    if (!ingredient) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
+    }
+    const pizzas = await ingredient.getPizzas();
+    if (pizzas.length === 0) {
+        throw new ApiError(httpStatus.NOT_FOUND, "No pizzas found");
+    }
+    return pizzas;
 };
