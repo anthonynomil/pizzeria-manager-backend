@@ -1,35 +1,25 @@
 import {DataTypes} from "sequelize";
 import {sequelize} from "../config/sequelize.config.js";
 
-export const Order = sequelize.define("order", {
+export const Token = sequelize.define("token", {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        onDelete: "CASCADE",
         references: {
             model: "users",
             key: "id",
-        },
+        }
     },
-    status: {
+    token: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    delivery: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    },
-    address: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    phone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    total: {
-        type: DataTypes.INTEGER,
+    expiresAt: {
+        type: DataTypes.DATE,
         allowNull: false,
     },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 });

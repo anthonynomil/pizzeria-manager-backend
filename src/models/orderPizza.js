@@ -1,14 +1,22 @@
 import {DataTypes} from "sequelize";
 import {sequelize} from "../config/sequelize.config.js";
 
-export const OrderPizza = sequelize.define("order_pizza", {
-    pizza_id: {
+export const OrderPizza = sequelize.define("orderPizza", {
+    pizzaId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: "pizzas",
+            key: "id",
+        }
     },
-    order_id: {
+    orderId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: "orders",
+            key: "id",
+        }
     },
 }, {
     timestamps: false

@@ -3,31 +3,40 @@ import {Order} from "./order.model.js";
 import {OrderPizza} from "./orderPizza.js";
 import {Pizza} from "./pizza.model.js";
 import {PizzaIngredient} from "./pizzaIngredient.js";
+import {Token} from "./token.model.js";
 import {User} from "./user.model.js";
 
 export const associate = () => {
     Pizza.belongsToMany(Ingredient, {
         through: PizzaIngredient,
-        foreignKey: "pizza_id",
+        foreignKey: "pizzaId",
     });
     Ingredient.belongsToMany(Pizza, {
         through: PizzaIngredient,
-        foreignKey: "ingredient_id",
+        foreignKey: "ingredientId",
     });
     Order.belongsToMany(Pizza, {
         through: OrderPizza,
-        foreignKey: "order_id",
+        foreignKey: "orderId",
     });
     Pizza.belongsToMany(Order, {
         through: OrderPizza,
-        foreignKey: "pizza_id",
+        foreignKey: "pizzaId",
     });
     User.hasMany(Order, {
-        foreignKey: "user_id",
+        foreignKey: "userId",
         as: "order",
     });
     Order.belongsTo(User, {
-        foreignKey: "user_id",
+        foreignKey: "userId",
+        as: "user",
+    });
+    User.hasMany(Token, {
+        foreignKey: "userId",
+        as: "token",
+    });
+    Token.belongsTo(User, {
+        foreignKey: "userId",
         as: "user",
     });
 };
