@@ -10,5 +10,5 @@ ingredientRoutes.post("/add", validate(validatorIngredient.add), controllerIngre
 ingredientRoutes.get("/get", controllerIngredient.getAll);
 ingredientRoutes.get("/get/:id", validate(validatorIngredient.getId), controllerIngredient.getId);
 ingredientRoutes.get("/get/:id/pizzas", validate(validatorIngredient.pizzas), controllerIngredient.getPizzasById);
-ingredientRoutes.delete("/remove/:id", validate(validatorIngredient.remove), controllerIngredient.removeById);
 ingredientRoutes.put("/update/:id", validate(validatorIngredient.update), controllerIngredient.updateById);
+ingredientRoutes.delete("/remove/:id", validate(validatorIngredient.remove), controllerIngredient.removeById);

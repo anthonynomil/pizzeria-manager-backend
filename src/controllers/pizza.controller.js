@@ -15,12 +15,18 @@ export const add = catchAsync(async (req, res) => {
         price: price,
     };
     const pizza = await pizzaService.create(pizzaBody, ingredients);
-    res.status(httpStatus.CREATED).send(pizza);
+    sendResponse(res, httpStatus.CREATED, {
+        pizza: pizza,
+        message: "Pizza created"
+    });
 });
 
 export const getAll = catchAsync(async (req, res) => {
     const pizzas = await pizzaService.getAll();
-    res.status(httpStatus.OK).send(pizzas);
+    sendResponse(res, httpStatus.OK, {
+        pizzas: pizzas,
+        message: "Pizzas retrieved",
+    });
 });
 
 export const getById = catchAsync(async (req, res) => {
@@ -29,10 +35,13 @@ export const getById = catchAsync(async (req, res) => {
     if (!pizza) {
         throw new ApiError(httpStatus.NOT_FOUND, "Pizza not found");
     }
-    res.status(httpStatus.OK).send(pizza);
+    sendResponse(res, httpStatus.OK, {
+        pizza: pizza,
+        message: "Pizza retrieved",
+    });
 });
 
-export const updateById = catchAsync(async (req, res) => {
+export const update = catchAsync(async (req, res) => {
     const {
         id,
         name,
@@ -43,52 +52,27 @@ export const updateById = catchAsync(async (req, res) => {
         name: name,
         price: price,
     };
-    const pizza = await pizzaService.updateById(id, pizzaBody, ingredients);
-    res.status(httpStatus.OK).send(pizza);
-});
-
-export const removeById = catchAsync(async (req, res) => {
-    const {id} = req.body;
-    const pizza = await pizzaService.removeById(id);
-    res.status(httpStatus.OK).send(pizza);
-});
-
-export const getIngredientsByPizzaId = catchAsync(async (req, res) => {
-    const {id} = req.query;
-    const ingredients = await pizzaService.getIngredientsById(id);
-    res.status(httpStatus.OK).send(ingredients);
-});
-
-export const getIngredientsByPizzaName = catchAsync(async (req, res) => {
-    const {name} = req.query;
-    const ingredients = await pizzaService.getIngredientsByName(name);
-    res.status(httpStatus.OK).send(ingredients);
-});
-
-export const getByName = catchAsync(async (req, res) => {
-    const {name} = req.query;
-    const pizza = await pizzaService.getByName(name);
-    if (!pizza) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Pizza not found");
-    }
-    res.status(httpStatus.OK).send(pizza);
-});
-
-export const removeByName = catchAsync(async (req, res) => {
-    const {
-        oldName,
-        name,
-        price,
-        ingredients
-    } = req.body;
-    const pizzaBody = {
-        name: name,
-        price: price,
-        ingredients: ingredients
-    };
-    const pizza = await pizzaService.updateByName(oldName, pizzaBody);
+    const pizza = await pizzaService.update(id, pizzaBody, ingredients);
     sendResponse(res, httpStatus.OK, {
         pizza: pizza,
-        message: "Pizza updated"
+        message: "Pizza updated",
+    });
+});
+
+export const remove = catchAsync(async (req, res) => {
+    const {id} = req.body;
+    const pizza = await pizzaService.remove(id);
+    sendResponse(res, httpStatus.OK, {
+        pizza: pizza,
+        message: "Pizza deleted",
+    });
+});
+
+export const getIngredients = catchAsync(async (req, res) => {
+    const {id} = req.query;
+    const ingredients = await pizzaService.getIngredients(id);
+    sendResponse(res, httpStatus.OK, {
+        ingredients: ingredients,
+        message: "Ingredients retrieved",
     });
 });
