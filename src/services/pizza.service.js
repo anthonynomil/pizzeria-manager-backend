@@ -31,6 +31,9 @@ const addIngredients = async (pizza, ingredients) => {
 
 export const getAll = async () => {
     return await Pizza.findAll({
+        where: {
+            custom: false
+        },
         include: "ingredients",
     });
 };

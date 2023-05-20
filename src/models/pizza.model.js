@@ -7,7 +7,7 @@ export const Pizza = sequelize.define("pizza", {
         allowNull: false,
     },
     price: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
     },
     custom: {
