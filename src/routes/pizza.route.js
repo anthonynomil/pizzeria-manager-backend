@@ -11,5 +11,5 @@ pizzaRoute.post("/add/custom", validate(pizzaValidator.add), pizzaController.add
 pizzaRoute.get("/get", pizzaController.getAll);
 pizzaRoute.get("/get/:id", validate(pizzaValidator.getId), pizzaController.getById);
 pizzaRoute.get("/get/:id/ingredients", validate(pizzaValidator.getId), pizzaController.getIngredients);
-pizzaRoute.put("/update/:id", validate(pizzaValidator.update), pizzaController.update);
-pizzaRoute.delete("/remove/:id", validate(pizzaValidator.getId), pizzaController.remove);
+pizzaRoute.put("/:id", validate(pizzaValidator.update), pizzaController.update);
+pizzaRoute.delete("/:id", validate(pizzaValidator.getId), pizzaController.remove);
