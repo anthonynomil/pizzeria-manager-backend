@@ -1,0 +1,11 @@
+{
+  "port": "4242",
+  "db": {
+    "host": "localhost",
+    "port": "27042",
+    "name": "mern-pool-day04"
+  },
+  "session": {
+    "secret": "mern-pool-day04-secret"
+  }
+}
