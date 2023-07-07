@@ -1,16 +1,25 @@
 import cors from "cors";
 import express from "express";
-import httpStatus from "http-status";
 import router from "./router/router";
-import ApiError from "./utils/ApiError.js";
-import { errorConverter, errorHandler } from "./middlewares/error";
+import dotenv from "dotenv";
+import {
+  errorConverter,
+  errorHandler,
+  unexpectedErrorHandler,
+} from "./middlewares/error";
+import { connectToDb } from "./config/database.config";
+import ApiError from "./utils/ApiError";
+import httpStatus from "http-status";
 
 const app = express();
+dotenv.config();
+
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
 app.options("*", cors());
-
+connectToDb().then(() => console.log("Database connection established."));
 app.use("/", router);
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, "Route not found"));
@@ -18,15 +27,11 @@ app.use((req, res, next) => {
 app.use(errorConverter);
 app.use(errorHandler);
 
-const unexpectedErrorHandler = (error: Error) => {
-  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
-};
-
 process.on("uncaughtException", unexpectedErrorHandler);
 process.on("unhandledRejection", unexpectedErrorHandler);
 
-app.listen(process.env["PORT"], () => {
-  console.log(`Server started on port ${process.env["PORT"]}`);
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
 
 process.on("SIGINT", async () => {

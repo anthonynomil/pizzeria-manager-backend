@@ -1,6 +1,6 @@
-interface ObjectType {
+type ObjectType = {
   [key: string]: any;
-}
+};
 
 const pick = (object: ObjectType, keys: string[]) => {
   return keys.reduce((obj: ObjectType, key) => {

@@ -1,13 +1,13 @@
 import { Router } from "express";
-import ingredientRouter from "./ingredient/ingredient.routes.js";
+import ingredientRouter from "./ingredient.routes";
 
 const router: Router = Router();
 
-const routes: any[] = [
+const routes: routes = [
   {
-    path:"/ingredient",
-    router: ingredientRouter
-  }
+    path: "/ingredient",
+    router: ingredientRouter,
+  },
 ];
 
 routes.forEach((route) => {
@@ -15,3 +15,8 @@ routes.forEach((route) => {
 });
 
 export default router;
+
+export type routes = {
+  path: string;
+  router: Router;
+}[];
