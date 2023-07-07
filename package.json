@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "prettier": {
+    "printWidth": 100
+  },
   "dependencies": {
     "@types/cors": "^2.8.13",
     "cors": "^2.8.5",

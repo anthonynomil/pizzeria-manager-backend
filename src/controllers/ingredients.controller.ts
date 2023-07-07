@@ -39,6 +39,17 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+export const update = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const ingredient = await iServices.update(id, name);
+  if (!ingredient) {
+    res.status(httpStatus.NOT_FOUND).send({
+      message: "Ingredient not found",
+    });
+  }
+});
+
 export const remove = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const ingredient = await iServices.remove(id);

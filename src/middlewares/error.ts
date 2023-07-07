@@ -2,12 +2,7 @@ import httpStatus from "http-status";
 import ApiError from "../utils/ApiError.js";
 import { Request, Response } from "express";
 
-export const errorConverter = (
-  err: ApiError | Error,
-  req: Request,
-  res: Response,
-  next: any
-) => {
+export const errorConverter = (err: ApiError | Error, req: Request, res: Response, next: any) => {
   let error = err;
   if (!(error instanceof ApiError)) {
     const statusCode = httpStatus.BAD_REQUEST;
@@ -17,12 +12,7 @@ export const errorConverter = (
   next(error);
 };
 
-export const errorHandler = (
-  err: ApiError,
-  req: Request,
-  res: Response,
-  next: any
-) => {
+export const errorHandler = (err: ApiError, req: Request, res: Response, next: any) => {
   let { statusCode, message } = err;
   res.locals.errorMessage = err.message;
   const response = {

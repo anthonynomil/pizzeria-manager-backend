@@ -17,6 +17,15 @@ export const getId = Joi.object({
   }),
 });
 
+export const update = Joi.object({
+  params: Joi.object({
+    id: schema.id,
+  }),
+  body: Joi.object({
+    name: schema.name,
+  }),
+});
+
 export let deleteId = Joi.object({
   params: Joi.object({
     id: schema.id,
