@@ -6,6 +6,7 @@ import { errorConverter, errorHandler, unexpectedErrorHandler } from "./middlewa
 import { connectToDb } from "./config/database.config";
 import ApiError from "./utils/ApiError";
 import httpStatus from "http-status";
+import { associate } from "./config/databaseAssociation.config";
 
 const app = express();
 dotenv.config();
@@ -16,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.options("*", cors());
 connectToDb()
-  .then(() => console.log("Database connection established."))
+  .then(() => associate())
   .catch((err) => console.log(err));
 app.use("/", router);
 app.use((req, res, next) => {

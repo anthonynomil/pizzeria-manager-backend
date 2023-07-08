@@ -9,12 +9,7 @@ export const sequelize: Sequelize = new Sequelize({
   database: "postgres",
 });
 
-export const associate = () => {
-  // TODO Make associations here
-};
-
 export const connectToDb = async () => {
   await sequelize.authenticate();
   await sequelize.sync();
-  associate();
 };
