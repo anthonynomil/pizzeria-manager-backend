@@ -2,11 +2,7 @@ import cors from "cors";
 import express from "express";
 import router from "./router/router";
 import dotenv from "dotenv";
-import {
-  errorConverter,
-  errorHandler,
-  unexpectedErrorHandler,
-} from "./middlewares/error";
+import { errorConverter, errorHandler, unexpectedErrorHandler } from "./middlewares/error";
 import { connectToDb } from "./config/database.config";
 import ApiError from "./utils/ApiError";
 import httpStatus from "http-status";
@@ -19,7 +15,9 @@ const PORT = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 app.options("*", cors());
-connectToDb().then(() => console.log("Database connection established."));
+connectToDb()
+  .then(() => console.log("Database connection established."))
+  .catch((err) => console.log(err));
 app.use("/", router);
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, "Route not found"));

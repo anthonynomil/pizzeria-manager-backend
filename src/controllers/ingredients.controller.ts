@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import httpStatus from "http-status";
 import iServices from "../services/ingredients.service";
+import ApiError from "../utils/ApiError";
 
 export let add = catchAsync(async (req: Request, res: Response) => {
   const { name } = req.body;
@@ -29,9 +30,7 @@ export const getById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const ingredient = await iServices.getById(id);
   if (!ingredient) {
-    res.status(httpStatus.NOT_FOUND).send({
-      message: "Ingredient not found",
-    });
+    throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
   }
   res.status(httpStatus.OK).send({
     message: "Ingredient found",
@@ -44,10 +43,12 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   const { name } = req.body;
   const ingredient = await iServices.update(id, name);
   if (!ingredient) {
-    res.status(httpStatus.NOT_FOUND).send({
-      message: "Ingredient not found",
-    });
+    throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
   }
+  res.status(httpStatus.OK).send({
+    message: "Ingredient updated",
+    ingredient,
+  });
 });
 
 export const remove = catchAsync(async (req: Request, res: Response) => {
