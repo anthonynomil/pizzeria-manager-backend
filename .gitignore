@@ -1,2 +1,5 @@
-.env
 /logs
+/node_modules
+.idea/
+.env
+/.env
