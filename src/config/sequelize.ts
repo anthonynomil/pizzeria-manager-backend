@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
 import env from "config/env";
 
 const sequelize: Sequelize = new Sequelize({
@@ -9,6 +9,7 @@ const sequelize: Sequelize = new Sequelize({
   password: env.DB_PASSWORD,
   database: env.DB_NAME,
   logging: false,
+  models: [__dirname + "/../models"]
 });
 
 export default sequelize;
