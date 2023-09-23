@@ -1,9 +1,10 @@
 import User from "models/User.model";
 import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
-import { TUserRoles } from "const/enums/user.roles";
+import { CreationAttributes } from "sequelize";
+import { UpdateAttributes } from "@types";
 
-const create = async (data: creationData): Promise<User> => {
+const create = async (data: CreationAttributes<User>): Promise<User> => {
   if (await User.isEmailTaken(data.email)) {
     throw new ApiError(httpStatus.CONFLICT, "Email is already taken");
   }
@@ -18,7 +19,7 @@ const getByEmail = async (email: string): Promise<User | null> => {
   return await User.findOne({ where: { email } });
 };
 
-const update = async (id: number, data: updateData): Promise<void> => {
+const update = async (id: number, data: UpdateAttributes<User>): Promise<void> => {
   const user = await getById(id);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   await user.update(data);
@@ -37,17 +38,3 @@ export default {
   update,
   remove,
 };
-
-interface creationData {
-  email: string;
-  password: string;
-  name?: string;
-  role?: TUserRoles;
-}
-
-interface updateData {
-  email?: string;
-  password?: string;
-  name?: string;
-  role?: TUserRoles;
-}
