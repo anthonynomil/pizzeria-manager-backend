@@ -28,6 +28,10 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
   };
 
   static associate = (models: IDb) => {};
+
+  static isNameTaken = async (name: string): Promise<boolean> => {
+    return !!(await Ingredient.findOne({ where: { name } }));
+  };
 }
 
 export default Ingredient;
