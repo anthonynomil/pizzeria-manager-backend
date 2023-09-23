@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import env from "config/env";
 import User from "models/User.model";
 import Token from "models/Token.model";
+import Ingredient from "models/Ingredient.model";
 
 const sequelize: Sequelize = new Sequelize({
   dialect: env.DB_DIALECT,
@@ -13,25 +14,22 @@ const sequelize: Sequelize = new Sequelize({
   logging: false,
 });
 
-export interface IDb {
-  Sequelize: typeof Sequelize;
-  sequelize: typeof sequelize;
-
-  Token: typeof Token;
-  User: typeof User;
-}
-
-export const db: IDb = {
+export const db = {
   Sequelize,
   sequelize,
 
+  Ingredient,
   Token,
   User,
 };
 
+export type IDb = typeof db;
+
+Ingredient.initialize(db.sequelize);
 User.initialize(db.sequelize);
 Token.initialize(db.sequelize);
 
+Ingredient.associate(db);
 User.associate(db);
 Token.associate(db);
 

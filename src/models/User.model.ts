@@ -60,7 +60,9 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     });
   };
 
-  static isEmailTaken = async (email: string): Promise<boolean> => !!(await User.findOne({ where: { email } }));
+  static isEmailTaken = async (email: string): Promise<boolean> => {
+    return !!(await User.findOne({ where: { email } }));
+  };
 
   passwordMatch: NonAttribute<Function> = async (password: string): Promise<boolean> => {
     return await compare(password, this.password!);

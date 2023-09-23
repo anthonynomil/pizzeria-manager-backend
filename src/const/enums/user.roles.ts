@@ -1,6 +1,7 @@
 enum userRole {
   DEV = 999,
-  ADMIN = 2,
+  ADMIN = 3,
+  MODERATOR = 2,
   USER = 1,
   GUEST = 0,
 }
