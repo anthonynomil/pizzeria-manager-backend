@@ -1,0 +1,74 @@
+{
+  id: "9ea8921a-536c-4728-8609-728f6243b7c1",
+  name: "ingredient",
+  icon: "FOLDER",
+  sortWeight: 3000000,
+  requests: [
+    {
+      id: "2a094e1c-886b-4612-a78b-72ef83fd61e2",
+      name: "Create",
+      method: "POST",
+      url: "{{urls.ingredient}}/",
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "name": "SAlad"\
+}'
+      }
+    },
+    {
+      id: "6cf4a6d2-acf1-4038-a907-59429c345ee1",
+      name: "Get",
+      method: "GET",
+      url: "{{urls.ingredient}}/:ingredientId",
+      pathVariables: [
+        {
+          key: "ingredientId",
+          value: "1"
+        }
+      ]
+    },
+    {
+      id: "3ce85b5f-de3a-4b07-b956-fd1873d16d67",
+      name: "Update",
+      method: "PUT",
+      url: "{{urls.ingredient}}/:ingredientId",
+      pathVariables: [
+        {
+          key: "ingredientId",
+          value: "1"
+        }
+      ],
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "name": "salad"\
+}'
+      }
+    },
+    {
+      id: "74440067-ac1b-4554-bcd2-9a52a299d4eb",
+      name: "Delete",
+      method: "DELETE",
+      url: "{{urls.ingredient}}/:ingredientId",
+      pathVariables: [
+        {
+          key: "ingredientId",
+          value: "1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  id: "4581781a-c38a-4c7e-9917-2a3edd258233",
+  name: "user",
+  icon: "FOLDER",
+  sortWeight: 2000000,
+  requests: [
+    {
+      id: "6a5ee193-a787-4909-91e6-ca7b08caaeba",
+      name: "Create",
+      method: "POST",
+      url: "{{urls.user}}/",
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "email": "joedughetto@mail.com",\
+  "password": "joemama",\
+  "role": "1",\
+  "name": "JoeLeBg"\
+}'
+      }
+    },
+    {
+      id: "15a00d6c-545f-4268-9258-371ee7e5ce16",
+      name: "Edit",
+      method: "PUT",
+      url: "{{urls.user}}/:userId",
+      pathVariables: [
+        {
+          key: "userId",
+          value: "1"
+        }
+      ],
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "password": "joemama"\
+}'
+      }
+    },
+    {
+      id: "a4b6762d-380f-4733-8f15-2e85b808a2ae",
+      name: "Delete",
+      method: "DELETE",
+      url: "{{urls.user}}/:userId",
+      pathVariables: [
+        {
+          key: "userId",
+          value: "2"
+        }
+      ]
+    },
+    {
+      id: "8a7129d0-e0ac-4530-81d8-a95445374e8d",
+      name: "Get",
+      method: "GET",
+      url: "{{urls.user}}/:userId",
+      pathVariables: [
+        {
+          key: "userId",
+          value: "1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  id: "56160b71-4927-4934-ad4b-d37f4ec7d03d",
+  name: "auth",
+  icon: "FOLDER",
+  sortWeight: 1000000,
+  variables: {
+    default: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTY5NTQ3NDcyODU0NywiZXhwIjoxNjk1NDc1MzI4NTQ3LCJ0eXBlIjoiYWNjZXNzIn0.aC9GUPf5TnRtUTsjd34_impZk9B4Q8Vj5rVuu6IZeWM'
+    }
+  },
+  requests: [
+    {
+      id: "87e1a65f-9a2b-4a92-82eb-7c86681b70fc",
+      name: "Login",
+      method: "POST",
+      url: "{{urls.auth}}/login",
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "email": "joemama@mail.com",\
+  "password": "joemama"\
+}'
+      },
+      testScript: 'jc.test("Status code is 200", () => {\
+  if (jc.response.code === 200) {\
+    const data = jc.response.json()\
+    jc.globalVariables.setDefault("token", data.tokens.access.token)\
+  }\
+})'
+    },
+    {
+      id: "f6859ad6-98e1-4559-9dc0-e1752f8db55f",
+      name: "Register",
+      method: "POST",
+      url: "{{urls.auth}}/register",
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/json"
+        }
+      ],
+      body: {
+        type: "JSON",
+        raw: '{\
+  "email": "joemama@mail.com",\
+  "password": "joemama",\
+  "confirmPassword": "joemama"\
+}'
+      },
+      testScript: 'if (jc.response.code === 200) {\
+  jc.test("Status code is 200", () => {\
+      const data = jc.response.json()\
+      jc.folderVariables.setSharedDefault("token", data.tokens.access.token)\
+  })\
+}'
+    }
+  ]
+}

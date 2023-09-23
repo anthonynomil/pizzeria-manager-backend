@@ -1,0 +1,12 @@
+{
+  id: "0e7beb32-c663-49e6-b731-31e7af488fbb",
+  name: "pizza-manager-backend",
+  icon: "FOLDER",
+  sortWeight: 1000000,
+  auth: {
+    type: "BEARER",
+    bearer: {
+      token: "{{token}}"
+    }
+  }
+}
