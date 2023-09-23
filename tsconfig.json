@@ -23,6 +23,7 @@
   },
   "include": [
     "src",
+    "src/@types/*.d.ts",
     "node_modules/.pnpm/luxon@3.3.0/node_modules/luxon/build/global/luxon.js"
   ]
 }

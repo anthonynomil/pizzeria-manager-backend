@@ -1,8 +1,8 @@
-import { cleanEnv, host, num, str, url } from "envalid";
+import { cleanEnv, host, num, str } from "envalid";
 import process from "process";
 import logger from "config/logger";
 
-const envSpecs: any = {
+const envSpecs = {
   //DB
   DB_DIALECT: str({ choices: ["mysql", "postgres", "sqlite", "mariadb", "mssql", "db2", "snowflake", "oracle"] }),
   DB_HOST: host(),
@@ -23,9 +23,7 @@ const envSpecs: any = {
   JWT_ACCESS_EXPIRATION_MINUTES: num(),
 };
 
-type cleanedEnv = typeof envSpecs;
-
-const env: Readonly<cleanedEnv> = cleanEnv(process.env, envSpecs, {
+const env = cleanEnv(process.env, envSpecs, {
   reporter: ({ errors }) => {
     if (Object.keys(errors).length === 0) return;
     logger.error("Invalid environment variables: " + Object.keys(errors).join(", "));

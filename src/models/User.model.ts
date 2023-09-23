@@ -1,48 +1,69 @@
-import {
-  AllowNull, AutoIncrement,
-  BeforeCreate,
-  BeforeUpdate,
-  Column,
-  Default,
-  Model,
-  PrimaryKey,
-  Table,
-  Unique
-} from "sequelize-typescript";
-import bcrypt from "bcrypt";
-import { Omit } from "sequelize-typescript/dist/shared/types";
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
+import { compare, hash } from "bcrypt";
+import { IDb } from "config/sequelize";
+import userRoles, { TUserRoles } from "const/enums/user.roles";
 
-@Table
-class User extends Model<Omit<"id", number>> {
-  @Unique
-  @Column
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+  declare id: CreationOptional<number>;
+
   declare email: string;
-
-  @Column
   declare password?: string;
 
-  @AllowNull
-  @Column
-  declare name: string;
+  declare name: CreationOptional<string>;
+  declare role: CreationOptional<TUserRoles>;
 
-  @Default("user")
-  @Column
-  declare role: string;
-
-  @BeforeUpdate
-  @BeforeCreate
-  static hashPassword = async (instance: User): Promise<void> => {
-    instance.password = await bcrypt.hash(instance.password!, 10);
+  static initialize = (sequelize: Sequelize): void => {
+    this.init(
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        password: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        role: {
+          type: DataTypes.INTEGER,
+          allowNull: true,
+          defaultValue: userRoles.USER,
+        },
+      },
+      {
+        sequelize,
+        tableName: "users",
+        hooks: {
+          async beforeCreate(user: User, options: any): Promise<void> {
+            if (user.password) user.password = await hash(user.password, 10);
+          },
+          async beforeUpdate(user: User, options: any): Promise<void> {
+            if (user.password) user.password = await hash(user.password, 10);
+          },
+        },
+      },
+    );
   };
 
-  static isEmailTaken = async (email: string, id?: number): Promise<boolean> => {
-    const where = { email };
-    if (id) Object.assign(where, { id });
-    return !!(await User.findOne({ where }));
+  static associate = (models: IDb) => {
+    User.hasMany(models.Token, {
+      foreignKey: "userId",
+      as: "tokens",
+    });
   };
 
-  passwordMatch = async (password: string): Promise<boolean> => {
-    return await bcrypt.compare(password, this.password!);
+  static isEmailTaken = async (email: string): Promise<boolean> => !!(await User.findOne({ where: { email } }));
+
+  passwordMatch: NonAttribute<Function> = async (password: string): Promise<boolean> => {
+    return await compare(password, this.password!);
   };
 }
 

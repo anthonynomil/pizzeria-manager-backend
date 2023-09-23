@@ -1,1 +1,4 @@
-# clean-back-typescript
+# Pizzeria manager backend
+
+## Install
+

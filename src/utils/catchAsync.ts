@@ -1,7 +1,7 @@
 import e from "express";
-import { Controller } from "@types";
+import { TController } from "@types";
 
-const catchAsync = (fn: Controller) => (req: e.Request, res: e.Response, next: e.NextFunction) => {
+const catchAsync = (fn: TController) => (req: e.Request, res: e.Response, next: e.NextFunction) => {
   Promise.resolve(fn(req, res, next)).catch((err: Error) => {
     next(err);
   });

@@ -3,8 +3,7 @@ import app from "app";
 import logger from "config/logger";
 import { Server } from "http";
 import process from "process";
-import sequelize from "config/sequelize";
-import associations from "models/associations";
+import sequelize, { db } from "config/sequelize";
 import env from "config/env";
 
 let server: Server<any> | undefined = undefined;
@@ -30,12 +29,9 @@ process.on("unhandledRejection", unexpectedErrorHandler);
 
 const port: number = env.SERVER_PORT;
 
-sequelize.authenticate().then(async () => {
-  await sequelize.sync();
+db.sequelize.authenticate().then(async () => {
   logger.info("Database connected");
-  associations();
-  await sequelize.sync();
-  logger.info("Models synced");
+  await sequelize.sync({ alter: true });
   server = app.listen(port, () => {
     logger.info(`Listening to port ${port}`);
   });

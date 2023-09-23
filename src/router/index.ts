@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { route } from "@types";
+import { TRoute } from "@types";
 import routes from "routes";
 
 const router: Router = Router();
 
-routes.forEach((route: route) => {
+routes.forEach((route: TRoute) => {
   router.use(route.path, route.router);
 });
 
