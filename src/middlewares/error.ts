@@ -1,27 +1,45 @@
 import httpStatus from "http-status";
-import ApiError from "../utils/ApiError.js";
-import { Request, Response } from "express";
+import e from "express";
+import ApiError from "utils/ApiError";
+import logger from "config/logger";
+import { AxiosError } from "axios";
+import env from "config/env";
 
-export const errorConverter = (err: ApiError | Error, req: Request, res: Response, next: any) => {
+export const errorConverter = (
+  err: ApiError | Error | AxiosError,
+  req: e.Request,
+  res: e.Response,
+  next: e.NextFunction,
+): void => {
   let error = err;
   if (!(error instanceof ApiError)) {
     const statusCode = httpStatus.BAD_REQUEST;
     const message = error.message || httpStatus[statusCode];
-    error = new ApiError(statusCode, message);
+    error = new ApiError(statusCode, message, err.stack);
   }
   next(error);
 };
 
-export const errorHandler = (err: ApiError, req: Request, res: Response, next: any) => {
+export const errorHandler = (err: any, req: e.Request, res: e.Response, next: e.NextFunction): void => {
   let { statusCode, message } = err;
+  const envType = env.ENV;
+
+  if (envType === "production") {
+    statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
+  }
+
   res.locals.errorMessage = err.message;
+
   const response = {
     code: statusCode,
-    message: message,
+    message,
+    ...(envType === "development" && { stack: err.stack }),
   };
-  res.status(statusCode).send(response);
-};
 
-export const unexpectedErrorHandler = (error: Error) => {
-  throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, error.message);
+  if (envType === "development") {
+    logger.error(err);
+  }
+
+  res.status(statusCode).send(response);
 };

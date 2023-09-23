@@ -1,0 +1,11 @@
+version: "3.8"
+name: "pizzeria-manager-backend"
+services:
+  db:
+    image: postgres:16.0-alpine
+    container_name: "postgres"
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}

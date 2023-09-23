@@ -1,19 +1,13 @@
 import httpStatus from "http-status";
 
 class ApiError extends Error {
-  public statusCode: number;
+  private statusCode: number;
 
-  constructor(
-    statusCode: number = httpStatus.INTERNAL_SERVER_ERROR,
-    message: string,
-    stack: string = ""
-  ) {
+  constructor(statusCode: number = httpStatus.INTERNAL_SERVER_ERROR, message: string, stack: string = "") {
     super(message);
     this.statusCode = statusCode;
     if (stack) {
       this.stack = stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
     }
   }
 }
