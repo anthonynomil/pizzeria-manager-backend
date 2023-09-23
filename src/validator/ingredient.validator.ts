@@ -1,8 +1,9 @@
 import Joi from "joi";
+import { ingredientName } from "validator/helpers.validator";
 
 const create = {
   body: Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string().required().custom(ingredientName),
   }),
 };
 
@@ -15,6 +16,9 @@ const getById = {
 const update = {
   params: Joi.object({
     ingredientId: Joi.number().required(),
+  }),
+  body: Joi.object({
+    name: Joi.string().required().custom(ingredientName),
   }),
 };
 
