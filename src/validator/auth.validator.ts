@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passwordMatch } from "validator/helpers.validator";
 
 const login = {
   body: z.object({
@@ -12,10 +13,10 @@ const register = {
     .object({
       email: z.string().email(),
       password: z.string().min(5).max(20),
-      confirmPassword: z.string(),
+      confirmPassword: z.string().min(5).max(20),
       name: z.string().optional(),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine(passwordMatch, {
       message: "Passwords do not match",
     }),
 };

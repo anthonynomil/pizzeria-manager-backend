@@ -1,36 +1,54 @@
-import Joi from "joi";
-import userRoles from "const/enums/user.roles";
+import { z } from "zod";
+import { isUuidv4, passwordMatch, role } from "validator/helpers.validator";
 
 const create = {
-  body: Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    name: Joi.string(),
-    role: Joi.number().valid(...Object.values(userRoles)),
-  }),
+  body: z
+    .object({
+      email: z.string().email(),
+      password: z.string(),
+      confirmPassword: z.string(),
+      name: z.string().optional(),
+      role: z.number().optional().refine(role, {
+        message: "Role is not valid",
+      }),
+    })
+    .refine(passwordMatch, {
+      message: "Passwords do not match",
+    }),
 };
 
 const getById = {
-  params: Joi.object({
-    userId: Joi.number().required(),
+  params: z.object({
+    userId: z.string(),
   }),
 };
 
 const update = {
-  params: Joi.object({
-    userId: Joi.number().required(),
+  params: z.object({
+    userId: z.string().refine(isUuidv4, {
+      message: "Uuid is not valid",
+    }),
   }),
-  body: Joi.object({
-    email: Joi.string().email(),
-    password: Joi.string(),
-    name: Joi.string(),
-    role: Joi.number().valid(...Object.values(userRoles)),
-  }),
+  body: z
+    .object({
+      email: z.string().email().optional(),
+      name: z.string().optional(),
+      role: z.number().optional().refine(role, {
+        message: "Role is not valid",
+      }),
+      password: z.string().optional(),
+      confirmPassword: z.string().optional(),
+    })
+    .refine(passwordMatch, {
+      message: "Passwords do not match",
+    }),
 };
 
 const remove = {
-  params: Joi.object({
-    userId: Joi.number().required(),
+  params: z.object({
+    userId: z.string().refine(isUuidv4, {
+      message: "Uuid is not valid",
+    }),
   }),
 };
 
