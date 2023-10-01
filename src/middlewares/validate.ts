@@ -1,7 +1,7 @@
 import e from "express";
 import ApiError from "utils/ApiError";
-import pick from "utils/pick";
 import httpStatus from "http-status";
+import pick from "utils/pick.utils";
 
 const validate =
   (schema: any) =>

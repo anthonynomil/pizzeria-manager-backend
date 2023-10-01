@@ -17,7 +17,7 @@ const getById = async (id: Uuidv4): Promise<User | null> => {
 };
 
 const getByEmail = async (email: string): Promise<User | null> => {
-  return await User.findOne({ where: { email } });
+  return await User.scope(undefined).findOne({ where: { email } });
 };
 
 const update = async (id: Uuidv4, data: UpdateAttributes<User>): Promise<void> => {

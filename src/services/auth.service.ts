@@ -10,6 +10,7 @@ const login = async (email: string, password: string): Promise<User> => {
   if (!user || !(await user.passwordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect credentials");
   }
+  delete user.dataValues.password;
   return user;
 };
 

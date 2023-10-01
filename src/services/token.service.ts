@@ -19,11 +19,11 @@ const generate = (userId: Uuidv4, expires: Date, type: TTokenTypes, secret: stri
 
 const generateAuth = async (user: any) => {
   const accessTokenExpires = DateTime.now().plus({ minutes: env.JWT_ACCESS_EXPIRATION_MINUTES });
-  const accessToken = generate(user.uuid, accessTokenExpires.toJSDate(), tokensType.ACCESS);
+  const accessToken = generate(user.id, accessTokenExpires.toJSDate(), tokensType.ACCESS);
 
   const refreshTokenExpires = DateTime.now().plus({ days: env.JWT_REFRESH_EXPIRATION_DAYS });
-  const refreshToken = generate(user.uuid, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
-  await save(refreshToken, user.uuid, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
+  const refreshToken = generate(user.id, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
+  await save(refreshToken, user.id, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
 
   return {
     access: {
@@ -47,7 +47,8 @@ const save = async (token: string, userId: Uuidv4, expires: Date, type: TTokenTy
 
 const verify = async (token: string, type: string) => {
   const payload = jwt.verify(token, env.JWT_SECRET);
-  const tokenDoc = await Token.findOne({ where: { token, type, userId: Number(payload.sub) } });
+  console.log(payload.sub);
+  const tokenDoc = await Token.findOne({ where: { token, type, userId: String(payload.sub) } });
   if (!tokenDoc) throw new ApiError(httpStatus.NOT_FOUND, "Token not found");
   return tokenDoc;
 };

@@ -44,12 +44,15 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         sequelize,
         tableName: "users",
         hooks: {
-          async afterCreate(attributes: User, options: CreateOptions<User>): Promise<void> {
+          async beforeCreate(attributes: User, options: CreateOptions<User>): Promise<void> {
             if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
-          async afterUpdate(attributes: User, options: CreateOptions<User>): Promise<void> {
+          async beforeUpdate(attributes: User, options: CreateOptions<User>): Promise<void> {
             if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
+        },
+        defaultScope: {
+          attributes: { exclude: ["password"] },
         },
       },
     );
