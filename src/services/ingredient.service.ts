@@ -2,7 +2,7 @@ import { CreationAttributes } from "sequelize";
 import Ingredient from "models/Ingredient.model";
 import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
-import { UpdateAttributes } from "@types";
+import { UpdateAttributes } from "types";
 
 const create = async (data: CreationAttributes<Ingredient>): Promise<Ingredient> => {
   if (await Ingredient.isNameTaken(data.name)) {

@@ -1,8 +1,10 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
 import { IDb } from "config/sequelize";
+import type { uuidv4 } from "types/uuidv4";
 
 class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttributes<Ingredient>> {
   declare id: CreationOptional<number>;
+  declare uuid: CreationOptional<uuidv4>;
 
   declare name: string;
 
@@ -13,6 +15,11 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
           type: DataTypes.INTEGER,
           autoIncrement: true,
           primaryKey: true,
+        },
+        uuid: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          unique: true,
         },
         name: {
           type: DataTypes.STRING,

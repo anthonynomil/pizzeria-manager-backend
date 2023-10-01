@@ -1,10 +1,11 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
-import { compare, hash } from "bcrypt";
+import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
+import { compare, hash } from "bcryptjs";
 import { IDb } from "config/sequelize";
 import userRoles, { TUserRoles } from "const/enums/user.roles";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
+  declare uuid: CreationOptional<string>;
 
   declare email: string;
   declare password?: string;
@@ -20,9 +21,15 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
           autoIncrement: true,
           primaryKey: true,
         },
+        uuid: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          unique: true,
+        },
         email: {
           type: DataTypes.STRING,
           allowNull: false,
+          unique: true,
         },
         password: {
           type: DataTypes.STRING,
@@ -42,11 +49,11 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         sequelize,
         tableName: "users",
         hooks: {
-          async beforeCreate(user: User, options: any): Promise<void> {
-            if (user.password) user.password = await hash(user.password, 10);
+          async afterCreate(attributes: User, options: CreateOptions<User>): Promise<void> {
+            if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
-          async beforeUpdate(user: User, options: any): Promise<void> {
-            if (user.password) user.password = await hash(user.password, 10);
+          async afterUpdate(attributes: User, options: CreateOptions<User>): Promise<void> {
+            if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
         },
       },

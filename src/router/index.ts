@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { TRoute } from "@types";
+import { TRoute } from "types";
 import routes from "routes";
 
 const router: Router = Router();

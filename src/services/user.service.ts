@@ -2,7 +2,7 @@ import User from "models/User.model";
 import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
 import { CreationAttributes } from "sequelize";
-import { UpdateAttributes } from "@types";
+import { UpdateAttributes } from "types";
 
 const create = async (data: CreationAttributes<User>): Promise<User> => {
   if (await User.isEmailTaken(data.email)) {
