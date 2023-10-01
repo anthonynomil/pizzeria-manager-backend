@@ -37,7 +37,7 @@ const generateAuth = async (user: any) => {
   };
 };
 
-const get = async (token: string) => {
+const getByToken = async (token: string) => {
   return await Token.findOne({ where: { token, type: tokensType.REFRESH, valid: true } });
 };
 
@@ -56,7 +56,7 @@ const verify = async (token: string, type: string) => {
 export default {
   generate,
   generateAuth,
-  get,
+  getByToken,
   save,
   verify,
 };

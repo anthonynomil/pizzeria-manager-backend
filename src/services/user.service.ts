@@ -22,7 +22,12 @@ const getByEmail = async (email: string): Promise<User | null> => {
 
 const update = async (id: Uuidv4, data: UpdateAttributes<User>): Promise<void> => {
   const user = await getById(id);
-  if (!user) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  if (data.email && (await User.isEmailTaken(data.email, id))) {
+    throw new ApiError(httpStatus.CONFLICT, "Email is already taken");
+  }
   await user.update(data);
 };
 

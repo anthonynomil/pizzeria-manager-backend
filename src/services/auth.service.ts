@@ -15,7 +15,7 @@ const login = async (email: string, password: string): Promise<User> => {
 };
 
 const logout = async (refreshTokens: string): Promise<void> => {
-  const token = await tokenService.get(refreshTokens);
+  const token = await tokenService.getByToken(refreshTokens);
   if (!token) {
     throw new ApiError(httpStatus.NOT_FOUND, "Token not found");
   }

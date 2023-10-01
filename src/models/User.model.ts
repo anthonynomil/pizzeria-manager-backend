@@ -1,4 +1,4 @@
-import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
+import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Op, Sequelize } from "sequelize";
 import { compare, hash } from "bcryptjs";
 import { Db } from "config/sequelize";
 import userRoles, { TUserRoles } from "const/enums/user.roles";
@@ -65,8 +65,9 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     });
   };
 
-  static isEmailTaken = async (email: string): Promise<boolean> => {
-    return !!(await User.findOne({ where: { email } }));
+  static isEmailTaken = async (email: string, id?: Uuidv4): Promise<boolean> => {
+    const where = id ? { [Op.and]: [{ email }, { id: { [Op.not]: id } }] } : { email };
+    return !!(await User.findOne({ where }));
   };
 
   passwordMatch: NonAttribute<Function> = async (password: string): Promise<boolean> => {

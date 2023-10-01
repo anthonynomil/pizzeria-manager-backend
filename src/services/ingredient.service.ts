@@ -20,10 +20,15 @@ const getById = async (id: Uuidv4): Promise<Ingredient | null> => {
   return ingredient;
 };
 
+const getAll = async (): Promise<Ingredient[]> => await Ingredient.findAll();
+
 const update = async (id: Uuidv4, data: UpdateAttributes<Ingredient>): Promise<void> => {
   const ingredient = await getById(id);
   if (!ingredient) {
     throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");
+  }
+  if (data.name && (await Ingredient.isNameTaken(data.name, id))) {
+    throw new ApiError(httpStatus.CONFLICT, "Ingredient already taken");
   }
   await ingredient.update(data);
 };
@@ -39,6 +44,7 @@ const remove = async (id: Uuidv4): Promise<void> => {
 export default {
   create,
   getById,
+  getAll,
   update,
   remove,
 };

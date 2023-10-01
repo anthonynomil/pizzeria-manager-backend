@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isUuidv4, passwordMatch, role } from "validator/helpers.validator";
+import { passwordMatch, role } from "validator/helpers.validator";
 
 const create = {
   body: z
@@ -19,15 +19,13 @@ const create = {
 
 const getById = {
   params: z.object({
-    userId: z.string(),
+    userId: z.string().uuid(),
   }),
 };
 
 const update = {
   params: z.object({
-    userId: z.string().refine(isUuidv4, {
-      message: "Uuid is not valid",
-    }),
+    userId: z.string().uuid(),
   }),
   body: z
     .object({
@@ -46,9 +44,7 @@ const update = {
 
 const remove = {
   params: z.object({
-    userId: z.string().refine(isUuidv4, {
-      message: "Uuid is not valid",
-    }),
+    userId: z.string().uuid(),
   }),
 };
 

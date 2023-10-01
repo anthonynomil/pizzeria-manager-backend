@@ -9,14 +9,18 @@ const validate =
     const validSchema = pick(schema, ["params", "query", "body"]);
     const keysToValidate = Object.keys(validSchema);
     const object = pick(req, keysToValidate);
+    console.log(object);
     const errors = [];
     for (const key of keysToValidate) {
       const parsed = validSchema[key].safeParse(object[key]);
       if (!parsed.success) {
+        console.log(parsed.error);
         const error = parsed.error.errors.map((e: any) => e.message).join(", ");
         errors.push(error);
       } else object[key] = parsed.data;
     }
+    console.log(errors);
+
     if (errors.length) return next(new ApiError(httpStatus.BAD_REQUEST, errors.join(", ")));
     Object.assign(req, object);
     next();

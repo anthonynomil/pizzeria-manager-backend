@@ -1,4 +1,15 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
+import {
+  CreationOptional,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyGetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  Op,
+  Sequelize,
+} from "sequelize";
 import { Db } from "config/sequelize";
 import { Uuidv4 } from "types";
 
@@ -6,6 +17,10 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
   declare id: CreationOptional<Uuidv4>;
 
   declare name: string;
+
+  declare addDish: HasManyAddAssociationMixin<Ingredient, Uuidv4>;
+  declare addDishes: HasManyAddAssociationsMixin<Ingredient[], Uuidv4>;
+  declare getDishes: HasManyGetAssociationsMixin<Ingredient>;
 
   static initialize = (sequelize: Sequelize) => {
     Ingredient.init(
@@ -24,6 +39,9 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
       {
         tableName: "ingredients",
         sequelize,
+        defaultScope: {
+          include: { all: true, nested: true },
+        },
       },
     );
   };
@@ -35,8 +53,9 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
     });
   };
 
-  static isNameTaken = async (name: string): Promise<boolean> => {
-    return !!(await Ingredient.findOne({ where: { name } }));
+  static isNameTaken = async (name: string, id?: Uuidv4): Promise<boolean> => {
+    const where = id ? { [Op.and]: [{ name }, { id: { [Op.not]: id } }] } : { name };
+    return !!(await Ingredient.findOne({ where }));
   };
 }
 

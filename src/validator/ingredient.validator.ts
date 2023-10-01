@@ -1,4 +1,4 @@
-import { ingredientName, isUuidv4 } from "validator/helpers.validator";
+import { ingredientName } from "validator/helpers.validator";
 import { z } from "zod";
 
 const create = {
@@ -9,17 +9,13 @@ const create = {
 
 const getById = {
   params: z.object({
-    ingredientUuid: z.string().refine(isUuidv4, {
-      message: "Uuid is not valid",
-    }),
+    ingredientId: z.string().uuid(),
   }),
 };
 
 const update = {
   params: z.object({
-    ingredientUuid: z.string().refine(isUuidv4, {
-      message: "Uuid is not valid",
-    }),
+    ingredientId: z.string().uuid(),
   }),
   body: z.object({
     name: z.string().transform(ingredientName),
@@ -28,9 +24,7 @@ const update = {
 
 const remove = {
   params: z.object({
-    ingredientUuid: z.string().refine(isUuidv4, {
-      message: "Uuid is not valid",
-    }),
+    ingredientId: z.string().uuid(),
   }),
 };
 

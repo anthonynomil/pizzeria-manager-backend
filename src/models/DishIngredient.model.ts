@@ -38,6 +38,7 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
       {
         sequelize,
         tableName: "dish_ingredients",
+        timestamps: false,
       },
     );
   };
