@@ -23,7 +23,7 @@ export const db = {
   User,
 };
 
-export type IDb = typeof db;
+export type Db = typeof db;
 
 Ingredient.initialize(db.sequelize);
 User.initialize(db.sequelize);

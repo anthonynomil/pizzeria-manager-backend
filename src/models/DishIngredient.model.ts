@@ -1,9 +1,10 @@
-import { DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
+import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
 import Dish from "models/Dish.model";
 import Ingredient from "models/Ingredient.model";
+import { Uuidv4 } from "types";
 
 class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreationAttributes<DishIngredient>> {
-  declare id: number;
+  declare id: CreationOptional<Uuidv4>;
 
   declare dishId: ForeignKey<Dish["id"]>;
   declare ingredientId: ForeignKey<Ingredient["id"]>;
@@ -12,12 +13,12 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
     DishIngredient.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         dishId: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.UUID,
           allowNull: false,
           references: {
             model: "dishes",
@@ -25,7 +26,7 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
           },
         },
         ingredientId: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.UUID,
           allowNull: false,
           references: {
             model: "ingredients",

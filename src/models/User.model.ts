@@ -1,11 +1,11 @@
 import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
 import { compare, hash } from "bcryptjs";
-import { IDb } from "config/sequelize";
+import { Db } from "config/sequelize";
 import userRoles, { TUserRoles } from "const/enums/user.roles";
+import { Uuidv4 } from "types";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  declare id: CreationOptional<number>;
-  declare uuid: CreationOptional<string>;
+  declare id: CreationOptional<Uuidv4>;
 
   declare email: string;
   declare password?: string;
@@ -17,14 +17,9 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     this.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        uuid: {
           type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
-          unique: true,
+          primaryKey: true,
         },
         email: {
           type: DataTypes.STRING,
@@ -60,7 +55,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     );
   };
 
-  static associate = (models: IDb) => {
+  static associate = (models: Db) => {
     User.hasMany(models.Token, {
       foreignKey: "userId",
       as: "tokens",

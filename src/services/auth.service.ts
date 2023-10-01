@@ -22,17 +22,11 @@ const logout = async (refreshTokens: string): Promise<void> => {
 };
 
 const refresh = async (refreshToken: string) => {
-  try {
-    const token = await tokenService.verify(refreshToken, tokensType.REFRESH);
-    const user = await userService.getById(token.userId);
-    if (!user) {
-      throw new Error();
-    }
-    await token.destroy();
-    return tokenService.generateAuth(user);
-  } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
-  }
+  const token = await tokenService.verify(refreshToken, tokensType.REFRESH);
+  const user = await userService.getById(token.userId);
+  if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
+  await token.destroy();
+  return tokenService.generateAuth(user);
 };
 
 export default {
@@ -40,5 +34,3 @@ export default {
   logout,
   refresh,
 };
-
-type TRegisterProps = {};
