@@ -19,7 +19,6 @@ const register = catchAsync(async (req: e.Request, res: e.Response): Promise<voi
 });
 
 const refreshToken = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  console.log(req.body);
   const tokens = await authService.refresh(req.body.refreshToken);
   res.send({ ...tokens });
 });

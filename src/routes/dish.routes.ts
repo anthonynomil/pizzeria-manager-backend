@@ -10,7 +10,7 @@ router.get("/:dishId", validate(dishValidator.getById), dishController.getById);
 router.put("/:dishId", validate(dishValidator.update), dishController.update);
 router.delete("/:dishId", validate(dishValidator.remove), dishController.remove);
 
-router.post("/:dishId/ingredient");
+router.post("/:dishId/ingredient/:ingredientId", validate(dishValidator.addIngredient), dishController.addIngredient);
 router.delete("/:dishId/ingredient/:ingredientId");
 
 export default router;

@@ -12,7 +12,7 @@ const create = async (data: CreationAttributes<Ingredient>): Promise<Ingredient>
   return await Ingredient.create(data);
 };
 
-const getById = async (id: Uuidv4): Promise<Ingredient | null> => {
+const getById = async (id: Uuidv4): Promise<Ingredient> => {
   const ingredient = await Ingredient.findByPk(id);
   if (!ingredient) {
     throw new ApiError(httpStatus.NOT_FOUND, "Ingredient not found");

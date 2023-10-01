@@ -8,6 +8,13 @@ const create = {
   }),
 };
 
+const addIngredient = {
+  params: z.object({
+    dishId: z.string().uuid(),
+    ingredientId: z.string().uuid(),
+  }),
+};
+
 const getById = {
   params: z.object({
     dishId: z.string().uuid(),
@@ -33,6 +40,7 @@ const remove = {
 
 export default {
   create,
+  addIngredient,
   getById,
   update,
   remove,

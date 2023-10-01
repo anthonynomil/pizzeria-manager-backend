@@ -47,7 +47,6 @@ const save = async (token: string, userId: Uuidv4, expires: Date, type: TTokenTy
 
 const verify = async (token: string, type: string) => {
   const payload = jwt.verify(token, env.JWT_SECRET);
-  console.log(payload.sub);
   const tokenDoc = await Token.findOne({ where: { token, type, userId: String(payload.sub) } });
   if (!tokenDoc) throw new ApiError(httpStatus.NOT_FOUND, "Token not found");
   return tokenDoc;

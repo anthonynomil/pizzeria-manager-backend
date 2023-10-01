@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import { UpdateAttributes } from "types/sequelize";
 import { Uuidv4 } from "types";
 import Ingredient from "models/Ingredient.model";
+import ingredientService from "services/ingredient.service";
 
 const create = async (data: CreationAttributes<Dish>): Promise<Dish> => {
   if (await Dish.isNameTaken(data.name)) {
@@ -15,7 +16,8 @@ const create = async (data: CreationAttributes<Dish>): Promise<Dish> => {
 
 const addIngredient = async (id: Uuidv4, ingredientId: Uuidv4): Promise<void> => {
   const dish = await getById(id);
-  await dish.addIngredient(ingredientId);
+  const ingredient = await ingredientService.getById(ingredientId);
+  await dish.addIngredient(ingredient.id);
 };
 
 const addIngredients = async (id: Uuidv4, ingredientIds: Uuidv4[]): Promise<void> => {
