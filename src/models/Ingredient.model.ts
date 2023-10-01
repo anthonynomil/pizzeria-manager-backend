@@ -28,7 +28,12 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
     );
   };
 
-  static associate = (models: Db) => {};
+  static associate = (db: Db) => {
+    Ingredient.hasMany(db.DishIngredient, {
+      foreignKey: "ingredientId",
+      as: "dishIngredients",
+    });
+  };
 
   static isNameTaken = async (name: string): Promise<boolean> => {
     return !!(await Ingredient.findOne({ where: { name } }));

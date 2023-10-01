@@ -3,6 +3,8 @@ import env from "config/env";
 import User from "models/User.model";
 import Token from "models/Token.model";
 import Ingredient from "models/Ingredient.model";
+import Dish from "models/Dish.model";
+import DishIngredient from "models/DishIngredient.model";
 
 const sequelize: Sequelize = new Sequelize({
   dialect: env.DB_DIALECT,
@@ -18,6 +20,8 @@ export const db = {
   Sequelize,
   sequelize,
 
+  Dish,
+  DishIngredient,
   Ingredient,
   Token,
   User,
@@ -25,12 +29,16 @@ export const db = {
 
 export type Db = typeof db;
 
-Ingredient.initialize(db.sequelize);
 User.initialize(db.sequelize);
 Token.initialize(db.sequelize);
+Dish.initialize(db.sequelize);
+Ingredient.initialize(db.sequelize);
+DishIngredient.initialize(db.sequelize);
 
-Ingredient.associate(db);
 User.associate(db);
 Token.associate(db);
+Dish.associate(db);
+Ingredient.associate(db);
+DishIngredient.associate(db);
 
 export default sequelize;

@@ -2,6 +2,7 @@ import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreation
 import Dish from "models/Dish.model";
 import Ingredient from "models/Ingredient.model";
 import { Uuidv4 } from "types";
+import { Db } from "config/sequelize";
 
 class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreationAttributes<DishIngredient>> {
   declare id: CreationOptional<Uuidv4>;
@@ -39,6 +40,19 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
         tableName: "dish_ingredients",
       },
     );
+  };
+
+  static associate = (db: Db) => {
+    DishIngredient.belongsTo(db.Dish, {
+      foreignKey: "dishId",
+      as: "dishes",
+      onDelete: "CASCADE",
+    });
+    DishIngredient.belongsTo(db.Ingredient, {
+      foreignKey: "ingredientId",
+      as: "ingredients",
+      onDelete: "CASCADE",
+    });
   };
 }
 
