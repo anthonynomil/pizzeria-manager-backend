@@ -10,19 +10,19 @@ const create = catchAsync(async (req: e.Request, res: e.Response): Promise<void>
 });
 
 const getById = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  const user = await userService.getById(Number(req.params.userId));
+  const user = await userService.getById(req.params.userId);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   user.password = undefined;
   res.send(user);
 });
 
 const update = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  await userService.update(Number(req.params.userId), req.body);
+  await userService.update(req.params.userId, req.body);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 const remove = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  await userService.remove(Number(req.params.userId));
+  await userService.remove(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

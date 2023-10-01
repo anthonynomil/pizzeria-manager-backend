@@ -11,7 +11,7 @@ class Dish extends Model<InferAttributes<Dish>, InferCreationAttributes<Dish>> {
     Dish.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },

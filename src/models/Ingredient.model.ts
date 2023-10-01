@@ -11,7 +11,7 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
     Ingredient.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },

@@ -19,13 +19,13 @@ class Token extends Model<InferAttributes<Token>, InferCreationAttributes<Token>
     Token.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           unique: true,
           primaryKey: true,
         },
         userId: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           references: {
             model: User,
             key: "id",

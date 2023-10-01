@@ -9,17 +9,17 @@ const create = catchAsync(async (req: e.Request, res: e.Response): Promise<void>
 });
 
 const getById = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  const ingredient = await ingredientService.getById(Number(req.params.ingredientId));
+  const ingredient = await ingredientService.getById(req.params.ingredientId);
   res.send(ingredient);
 });
 
 const update = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  await ingredientService.update(Number(req.params.ingredientId), req.body);
+  await ingredientService.update(req.params.ingredientId, req.body);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 const remove = catchAsync(async (req: e.Request, res: e.Response): Promise<void> => {
-  await ingredientService.remove(Number(req.params.ingredientId));
+  await ingredientService.remove(req.params.ingredientId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

@@ -13,12 +13,12 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
     DishIngredient.init(
       {
         id: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         dishId: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           allowNull: false,
           references: {
             model: "dishes",
@@ -26,7 +26,7 @@ class DishIngredient extends Model<InferAttributes<DishIngredient>, InferCreatio
           },
         },
         ingredientId: {
-          type: DataTypes.UUIDV4,
+          type: DataTypes.UUID,
           allowNull: false,
           references: {
             model: "ingredients",
