@@ -1,7 +1,8 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
+import { Uuidv4 } from "types";
 
 class Dish extends Model<InferAttributes<Dish>, InferCreationAttributes<Dish>> {
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<Uuidv4>;
 
   declare name: string;
   declare description: CreationOptional<string>;
@@ -10,8 +11,8 @@ class Dish extends Model<InferAttributes<Dish>, InferCreationAttributes<Dish>> {
     Dish.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
+          type: DataTypes.UUIDV4,
+          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         name: {

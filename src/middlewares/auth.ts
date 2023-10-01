@@ -8,7 +8,7 @@ import userRoles, { TUserRoles } from "const/enums/user.roles";
 const verifyCallback =
   (req: Request, resolve: any, reject: any, role: TUserRoles) =>
   async (err: Error | ApiError, user: User, info: any): Promise<any> => {
-    const isOwn = role === userRoles.OWN && user.id === Number(req.params.userId);
+    const isOwn = role === userRoles.OWN && user.id === req.params.userId;
     if (err || info || !user) {
       return reject(new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate"));
     }

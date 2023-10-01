@@ -1,10 +1,9 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
-import { IDb } from "config/sequelize";
-import type { uuidv4 } from "types/uuidv4";
+import { Db } from "config/sequelize";
+import { Uuidv4 } from "types";
 
 class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttributes<Ingredient>> {
-  declare id: CreationOptional<number>;
-  declare uuid: CreationOptional<uuidv4>;
+  declare id: CreationOptional<Uuidv4>;
 
   declare name: string;
 
@@ -12,14 +11,9 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
     Ingredient.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        uuid: {
-          type: DataTypes.UUID,
+          type: DataTypes.UUIDV4,
           defaultValue: DataTypes.UUIDV4,
-          unique: true,
+          primaryKey: true,
         },
         name: {
           type: DataTypes.STRING,
@@ -34,7 +28,7 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
     );
   };
 
-  static associate = (models: IDb) => {};
+  static associate = (models: Db) => {};
 
   static isNameTaken = async (name: string): Promise<boolean> => {
     return !!(await Ingredient.findOne({ where: { name } }));

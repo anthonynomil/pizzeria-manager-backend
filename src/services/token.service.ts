@@ -5,8 +5,9 @@ import ApiError from "utils/ApiError";
 import httpStatus from "http-status";
 import { DateTime } from "luxon";
 import tokensType, { TTokenTypes } from "const/enums/tokens.type";
+import type { Uuidv4 } from "types";
 
-const generate = (userId: number, expires: Date, type: TTokenTypes, secret: string = env.JWT_SECRET): string => {
+const generate = (userId: Uuidv4, expires: Date, type: TTokenTypes, secret: string = env.JWT_SECRET): string => {
   const payload = {
     sub: userId,
     iat: Date.now(),
@@ -18,11 +19,11 @@ const generate = (userId: number, expires: Date, type: TTokenTypes, secret: stri
 
 const generateAuth = async (user: any) => {
   const accessTokenExpires = DateTime.now().plus({ minutes: env.JWT_ACCESS_EXPIRATION_MINUTES });
-  const accessToken = generate(user.id, accessTokenExpires.toJSDate(), tokensType.ACCESS);
+  const accessToken = generate(user.uuid, accessTokenExpires.toJSDate(), tokensType.ACCESS);
 
   const refreshTokenExpires = DateTime.now().plus({ days: env.JWT_REFRESH_EXPIRATION_DAYS });
-  const refreshToken = generate(user.id, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
-  await save(refreshToken, user.id, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
+  const refreshToken = generate(user.uuid, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
+  await save(refreshToken, user.uuid, refreshTokenExpires.toJSDate(), tokensType.REFRESH);
 
   return {
     access: {
@@ -40,7 +41,7 @@ const get = async (token: string) => {
   return await Token.findOne({ where: { token, type: tokensType.REFRESH, valid: true } });
 };
 
-const save = async (token: string, userId: number, expires: Date, type: TTokenTypes) => {
+const save = async (token: string, userId: Uuidv4, expires: Date, type: TTokenTypes) => {
   return await Token.create({ token, userId, expires, type });
 };
 
