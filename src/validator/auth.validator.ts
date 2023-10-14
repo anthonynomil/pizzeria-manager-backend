@@ -1,24 +1,29 @@
-import Joi from "joi";
+import { z } from "zod";
+import { passwordMatch } from "validator/helpers.validator";
 
 const login = {
-  body: Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
+  body: z.object({
+    email: z.string().email(),
+    password: z.string().min(5).max(20),
   }),
 };
 
 const register = {
-  body: Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(5).max(20).required(),
-    confirmPassword: Joi.string().required(),
-    name: Joi.string(),
-  }),
+  body: z
+    .object({
+      email: z.string().email(),
+      password: z.string().min(5).max(20),
+      confirmPassword: z.string().min(5).max(20),
+      name: z.string().optional(),
+    })
+    .refine(passwordMatch, {
+      message: "Passwords do not match",
+    }),
 };
 
 const refreshTokens = {
-  body: Joi.object({
-    refreshToken: Joi.string().required(),
+  body: z.object({
+    refreshToken: z.string(),
   }),
 };
 

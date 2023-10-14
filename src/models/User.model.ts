@@ -1,10 +1,11 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from "sequelize";
-import { compare, hash } from "bcrypt";
-import { IDb } from "config/sequelize";
+import { CreateOptions, CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Op, Sequelize } from "sequelize";
+import { compare, hash } from "bcryptjs";
+import { Db } from "config/sequelize";
 import userRoles, { TUserRoles } from "const/enums/user.roles";
+import { Uuidv4 } from "types";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<Uuidv4>;
 
   declare email: string;
   declare password?: string;
@@ -16,13 +17,14 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     this.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
         email: {
           type: DataTypes.STRING,
           allowNull: false,
+          unique: true,
         },
         password: {
           type: DataTypes.STRING,
@@ -42,26 +44,30 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
         sequelize,
         tableName: "users",
         hooks: {
-          async beforeCreate(user: User, options: any): Promise<void> {
-            if (user.password) user.password = await hash(user.password, 10);
+          async beforeCreate(attributes: User, options: CreateOptions<User>): Promise<void> {
+            if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
-          async beforeUpdate(user: User, options: any): Promise<void> {
-            if (user.password) user.password = await hash(user.password, 10);
+          async beforeUpdate(attributes: User, options: CreateOptions<User>): Promise<void> {
+            if (attributes.password) attributes.password = await hash(attributes.password, 10);
           },
+        },
+        defaultScope: {
+          attributes: { exclude: ["password"] },
         },
       },
     );
   };
 
-  static associate = (models: IDb) => {
+  static associate = (models: Db) => {
     User.hasMany(models.Token, {
       foreignKey: "userId",
       as: "tokens",
     });
   };
 
-  static isEmailTaken = async (email: string): Promise<boolean> => {
-    return !!(await User.findOne({ where: { email } }));
+  static isEmailTaken = async (email: string, id?: Uuidv4): Promise<boolean> => {
+    const where = id ? { [Op.and]: [{ email }, { id: { [Op.not]: id } }] } : { email };
+    return !!(await User.findOne({ where }));
   };
 
   passwordMatch: NonAttribute<Function> = async (password: string): Promise<boolean> => {

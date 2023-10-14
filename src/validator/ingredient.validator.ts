@@ -1,30 +1,30 @@
-import Joi from "joi";
 import { ingredientName } from "validator/helpers.validator";
+import { z } from "zod";
 
 const create = {
-  body: Joi.object({
-    name: Joi.string().required().custom(ingredientName),
+  body: z.object({
+    name: z.string().transform(ingredientName),
   }),
 };
 
 const getById = {
-  params: Joi.object({
-    ingredientId: Joi.number().required(),
+  params: z.object({
+    ingredientId: z.string().uuid(),
   }),
 };
 
 const update = {
-  params: Joi.object({
-    ingredientId: Joi.number().required(),
+  params: z.object({
+    ingredientId: z.string().uuid(),
   }),
-  body: Joi.object({
-    name: Joi.string().required().custom(ingredientName),
+  body: z.object({
+    name: z.string().transform(ingredientName),
   }),
 };
 
 const remove = {
-  params: Joi.object({
-    ingredientId: Joi.number().required(),
+  params: z.object({
+    ingredientId: z.string().uuid(),
   }),
 };
 

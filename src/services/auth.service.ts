@@ -10,11 +10,12 @@ const login = async (email: string, password: string): Promise<User> => {
   if (!user || !(await user.passwordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect credentials");
   }
+  delete user.dataValues.password;
   return user;
 };
 
 const logout = async (refreshTokens: string): Promise<void> => {
-  const token = await tokenService.get(refreshTokens);
+  const token = await tokenService.getByToken(refreshTokens);
   if (!token) {
     throw new ApiError(httpStatus.NOT_FOUND, "Token not found");
   }
@@ -22,17 +23,11 @@ const logout = async (refreshTokens: string): Promise<void> => {
 };
 
 const refresh = async (refreshToken: string) => {
-  try {
-    const token = await tokenService.verify(refreshToken, tokensType.REFRESH);
-    const user = await userService.getById(token.userId);
-    if (!user) {
-      throw new Error();
-    }
-    await token.destroy();
-    return tokenService.generateAuth(user);
-  } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
-  }
+  const token = await tokenService.verify(refreshToken, tokensType.REFRESH);
+  const user = await userService.getById(token.userId);
+  if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
+  await token.destroy();
+  return tokenService.generateAuth(user);
 };
 
 export default {
@@ -40,5 +35,3 @@ export default {
   logout,
   refresh,
 };
-
-type TRegisterProps = {};

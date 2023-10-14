@@ -1,9 +1,7 @@
-type ObjectType = {
-  [key: string]: any;
-};
+import { Object } from "types";
 
-const pick = (object: ObjectType, keys: string[]): Object => {
-  return keys.reduce((obj: ObjectType, key) => {
+const pick = (object: Object, keys: string[]): Object => {
+  return keys.reduce((obj: Object, key) => {
     if (object && Object.prototype.hasOwnProperty.call(object, key)) {
       obj[key] = object[key];
     }

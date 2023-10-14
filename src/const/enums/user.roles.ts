@@ -3,7 +3,7 @@ enum userRole {
   ADMIN = 3,
   MODERATOR = 2,
   USER = 1,
-  GUEST = 0,
+  OWN = -1,
 }
 
 type EnumValues<T extends object> = T[keyof T];

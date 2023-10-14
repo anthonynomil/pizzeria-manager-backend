@@ -1,10 +1,11 @@
 import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, Sequelize } from "sequelize";
 import User from "models/User.model";
-import { IDb } from "config/sequelize";
+import { Db } from "config/sequelize";
 import tokensType, { TTokenTypes } from "const/enums/tokens.type";
+import type { Uuidv4 } from "types";
 
 class Token extends Model<InferAttributes<Token>, InferCreationAttributes<Token>> {
-  declare id: CreationOptional<number>;
+  declare id: CreationOptional<Uuidv4>;
 
   declare userId: ForeignKey<User["id"]>;
 
@@ -18,12 +19,13 @@ class Token extends Model<InferAttributes<Token>, InferCreationAttributes<Token>
     Token.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          unique: true,
           primaryKey: true,
         },
         userId: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.UUID,
           references: {
             model: User,
             key: "id",
@@ -56,7 +58,7 @@ class Token extends Model<InferAttributes<Token>, InferCreationAttributes<Token>
     );
   };
 
-  static associate = (models: IDb) => {
+  static associate = (models: Db) => {
     Token.belongsTo(models.User, {
       foreignKey: "userId",
       as: "user",

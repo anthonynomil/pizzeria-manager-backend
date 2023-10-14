@@ -1,23 +1,25 @@
-import httpStatus from "http-status";
-import Joi from "joi";
-import pick from "utils/pick";
-import ApiError from "utils/ApiError";
 import e from "express";
+import ApiError from "utils/ApiError";
+import httpStatus from "http-status";
+import pick from "utils/pick.utils";
 
 const validate =
   (schema: any) =>
   (req: e.Request, res: e.Response, next: e.NextFunction): any => {
     const validSchema = pick(schema, ["params", "query", "body"]);
-    const object = pick(req, Object.keys(validSchema));
-    const { value, error } = Joi.compile(validSchema)
-      .prefs({ errors: { label: `key` } })
-      .validate(object);
-    if (error) {
-      const errorMessage = error.details.map((details) => details.message).join(", ");
-      return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
+    const keysToValidate = Object.keys(validSchema);
+    const object = pick(req, keysToValidate);
+    const errors = [];
+    for (const key of keysToValidate) {
+      const parsed = validSchema[key].safeParse(object[key]);
+      if (!parsed.success) {
+        const error = parsed.error?.errors?.map((e: any) => e.message).join(", ");
+        errors.push(error);
+      } else object[key] = parsed.data;
     }
-    Object.assign(req, value);
-    return next();
+    if (errors.length) return next(new ApiError(httpStatus.BAD_REQUEST, errors.join(", ")));
+    Object.assign(req, object);
+    next();
   };
 
 export default validate;
