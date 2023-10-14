@@ -47,9 +47,11 @@ class Ingredient extends Model<InferAttributes<Ingredient>, InferCreationAttribu
   };
 
   static associate = (db: Db) => {
-    Ingredient.hasMany(db.DishIngredient, {
+    Ingredient.belongsToMany(db.Dish, {
+      as: "dishes",
       foreignKey: "ingredientId",
-      as: "dishIngredients",
+      targetKey: "id",
+      through: db.DishIngredient,
     });
   };
 

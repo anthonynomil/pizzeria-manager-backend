@@ -13,7 +13,7 @@ const validate =
     for (const key of keysToValidate) {
       const parsed = validSchema[key].safeParse(object[key]);
       if (!parsed.success) {
-        const error = parsed.error.errors.map((e: any) => e.message).join(", ");
+        const error = parsed.error?.errors?.map((e: any) => e.message).join(", ");
         errors.push(error);
       } else object[key] = parsed.data;
     }

@@ -17,7 +17,7 @@ const create = async (data: CreationAttributes<Dish>): Promise<Dish> => {
 const addIngredient = async (id: Uuidv4, ingredientId: Uuidv4): Promise<void> => {
   const dish = await getById(id);
   const ingredient = await ingredientService.getById(ingredientId);
-  await dish.addIngredient(ingredient.id);
+  await dish.addIngredient(ingredient);
 };
 
 const addIngredients = async (id: Uuidv4, ingredientIds: Uuidv4[]): Promise<void> => {
